@@ -1,0 +1,21 @@
+Changelog for Talisman Software Solutions Project
+
+05/09/2019
+==========
+
+1. Installed psycopg2 via pip
+  a. pip install psycopg2 (NB: couldn't install using pip3)
+2. Issued pip freeze > requirements.txt
+3. Added db.py 
+4. Changed _config.py
+5. Changed development.log
+6. Changed tasks/views.py
+7. Changed __init__.py (added db import)
+8. Changed webapp.py
+
+
+05/12/2019
+==========
+
+1. Changed tasks.views.py  
+2. db.py (to update task received from Android)

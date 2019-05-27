@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Talisman Software Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </head>
+<!-- Adapted from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_coming_soon -->
+<body>
+
+<div class="bgimg">
+  <div class="topleft">
+    <p>Talisman Software Solutions</p>
+  </div>
+  <div class="middle">
+    <h1>COMING SOON</h1>
+    <hr>
+    <p>35 days left</p>
+    <p>{{ message }}</p>
+  </div>
+  <div class="bottomleft">
+    <p id="demo">Some more text</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+ 4 -rwxrwxrwx 1 www-data www-data    38 May 10 02:05 webapp.py
+ 4 -rw-r--r-- 1 www-data www-data  1108 May 10 04:00 views.pyc
+ 4 -rwxrwxrwx 1 www-data www-data   660 May  8 08:14 views.py
+ 4 -rwxrwxrwx 1 www-data www-data   221 May  1 23:24 talismansoftwaresolutions.wsgi
+ 4 -rwxrwxrwx 1 www-data www-data   572 May  1 23:26 talismansoftwaresolutions.conf
+ 4 -rwxrwxrwx 1 www-data www-data   332 May 10 03:11 requirements.txt
+ 4 -rw-r--r-- 1 www-data www-data  1848 May 21 03:10 models.pyc
+ 4 -rw-rw-rw- 1 ricsau   ricsau    1234 May 21 03:10 models.py
+ 4 -rwxrwxrwx 1 www-data www-data  1635 May 10 03:41 development.log
+12 -rw-r--r-- 1 www-data www-data 10821 May 21 07:27 db.pyc
+16 -rwxrwxrwx 1 www-data www-data 13100 May 21 07:24 db.py
+ 4 -rwxrwxrwx 1 www-data www-data   457 May 12 10:25 changelog.txt
+ 4 -rwxrwxrwx 1 www-data www-data    84 Apr 27 20:25 app_NEW.py
+ 4 -rwxrwxrwx 1 www-data www-data   228 May 10 04:36 _config.py
+ 4 -rw-r--r-- 1 www-data www-data   524 May 10 04:00 __init__.pyc
+ 4 -rwxrwxrwx 1 www-data www-data   396 May 10 02:04 __init__.py
+ 0 -rwxrwxrwx 1 www-data www-data     0 May  2 00:58 README.md
+
+venv:
+total 20
+4 drwxrwxrwx 3 www-data www-data 4096 May  9 19:29 share
+4 -rwxrwxrwx 1 www-data www-data   69 May  9 19:29 pyvenv.cfg
+0 lrwxrwxrwx 1 www-data www-data    3 May  9 19:29 lib64 -> lib
+4 drwxrwxrwx 3 www-data www-data 4096 May  9 19:29 lib
+4 drwxrwxrwx 2 www-data www-data 4096 May  9 19:29 include
+4 drwxrwxrwx 2 www-data www-data 4096 May  9 19:30 bin
+
+users:
+total 20
+4 -rw-r--r-- 1 www-data www-data 2621 May 21 07:27 views.pyc
+4 -rwxrwxrwx 1 www-data www-data 1862 May 21 07:26 views.py
+4 drwxrwxrwx 2 www-data www-data 4096 May 10 03:59 __pycache__
+4 -rw-r--r-- 1 www-data www-data  149 May 10 04:27 __init__.pyc
+4 -rwxrwxrwx 1 www-data www-data   45 May  9 01:53 __init__.py
+
+tests:
+total 4
+4 -rwxrwxrwx 1 www-data www-data 331 May  7 23:29 test_json.py
+
+templates:
+total 4
+4 -rwxrwxrwx 1 www-data www-data 716 May  2 02:15 index.html
+
+tasks:
+total 24
+8 -rw-r--r-- 1 www-data www-data 4122 May 21 03:08 views.pyc
+8 -rwxrwxrwx 1 www-data www-data 6189 May 21 03:07 views.py
+4 drwxrwxrwx 2 www-data www-data 4096 May 10 03:59 __pycache__
+4 -rw-r--r-- 1 www-data www-data  149 May 10 04:00 __init__.pyc
+0 -rwxrwxrwx 1 www-data www-data    0 May  7 22:00 __init__.py
+
+static:
+total 12
+4 drwxrwxrwx 2 www-data www-data 4096 May  2 01:39 js
+4 drwxrwxrwx 2 www-data www-data 4096 May  2 01:20 images
+4 drwxrwxrwx 2 www-data www-data 4096 May  2 01:34 css
+
+old:
+total 12
+4 -rwxrwxrwx 1 www-data www-data 290 Apr 27 19:31 app_ORIGINAL.py
+4 -rwxrwxrwx 1 www-data www-data 348 Apr 27 20:19 TalismanSoftwareSolutions_ORIGINAL_NEWEST.wsgi
+4 -rwxrwxrwx 1 www-data www-data 314 Apr 27 19:34 TalismanSoftwareSolutions_ORIGINAL.wsgi
+
+java:
+total 72
+64 -rwxrwxrwx 1 www-data www-data 65139 May  7 23:55 json-20131018.jar
+ 4 -rwxrwxrwx 1 www-data www-data  1075 May  8 00:17 helloworld.java
+ 4 -rwxrwxrwx 1 www-data www-data   759 May  8 00:17 helloworld.class
+
+__pycache__:
+total 40
+4 -rw-rw-r-- 1 ricsau   ricsau    193 May 10 03:59 webapp.cpython-36.pyc
+4 -rwxrwxrwx 1 www-data www-data  220 May 10 02:09 webapp.cpython-35.pyc
+4 -rw-rw-r-- 1 ricsau   ricsau    858 May 10 03:59 views.cpython-36.pyc
+4 -rwxrwxrwx 1 www-data www-data  936 May  9 19:31 views.cpython-35.pyc
+8 -rw-rw-r-- 1 ricsau   ricsau   5794 May 10 03:59 db.cpython-36.pyc
+8 -rwxrwxrwx 1 www-data www-data 6308 May 10 03:02 db.cpython-35.pyc
+4 -rw-rw-r-- 1 ricsau   ricsau    434 May 10 03:59 __init__.cpython-36.pyc
+4 -rwxrwxrwx 1 www-data www-data  485 May 10 02:08 __init__.cpython-35.pyc

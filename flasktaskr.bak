@@ -1,0 +1,384 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.3 (Ubuntu 11.3-1.pgdg18.04+1)
+-- Dumped by pg_dump version 11.3 (Ubuntu 11.3-1.pgdg18.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: dev; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA dev;
+
+
+ALTER SCHEMA dev OWNER TO postgres;
+
+--
+-- Name: print(text); Type: FUNCTION; Schema: dev; Owner: flasktaskr
+--
+
+CREATE FUNCTION dev.print(text) RETURNS void
+    LANGUAGE plpgsql
+    AS $_$ 
+  begin 
+    raise notice '%', $1; 
+  end 
+$_$;
+
+
+ALTER FUNCTION dev.print(text) OWNER TO flasktaskr;
+
+--
+-- Name: register_user(text, text, text); Type: FUNCTION; Schema: dev; Owner: flasktaskr
+--
+
+CREATE FUNCTION dev.register_user(user_name text, user_email text, user_pwd text) RETURNS integer
+    LANGUAGE sql
+    AS $$
+INSERT INTO dev.users (user_name, email, password) VALUES (user_name, user_email, user_pwd)
+RETURNING user_id;
+$$;
+
+
+ALTER FUNCTION dev.register_user(user_name text, user_email text, user_pwd text) OWNER TO flasktaskr;
+
+--
+-- Name: scrap(); Type: FUNCTION; Schema: dev; Owner: flasktaskr
+--
+
+CREATE FUNCTION dev.scrap() RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+ DECLARE new_id INT;
+ BEGIN
+   DELETE FROM dev.users WHERE user_name = 'lhsu';
+   SELECT INTO new_id dev.register_user('lhsu', 'lhuse@aol.com', 'lhsu123');
+   RAISE NOTICE 'new_id: %', new_id;
+   -- INSERT INTO dev.register_user("lhsu", "lhuse@aol.com", "lhsu123") RETURNING user_id;
+   -- INSERT INTO dev.register_user(user_name, email, pwd) RETURNING user_id;
+   -- RETURN new_id;
+   -- SELECT dev.register_user($1, $2, $3) as new_id;  
+   RETURN new_id;
+ END
+ $_$;
+
+
+ALTER FUNCTION dev.scrap() OWNER TO flasktaskr;
+
+--
+-- Name: test_register_user(); Type: FUNCTION; Schema: dev; Owner: flasktaskr
+--
+
+CREATE FUNCTION dev.test_register_user() RETURNS void
+    LANGUAGE sql
+    AS $$  SELECT * FROM dev.register_user('lhsu', 'lhuse@aol.com', 'lhsu123') AS new_id;    
+$$;
+
+
+ALTER FUNCTION dev.test_register_user() OWNER TO flasktaskr;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: tasks; Type: TABLE; Schema: dev; Owner: flasktaskr
+--
+
+CREATE TABLE dev.tasks (
+    task_id integer NOT NULL,
+    user_id integer NOT NULL,
+    task_name text NOT NULL,
+    due_date text NOT NULL,
+    priority integer NOT NULL,
+    status integer NOT NULL,
+    date_added date DEFAULT CURRENT_DATE,
+    modification_date date DEFAULT CURRENT_DATE,
+    modified_by text,
+    to_delete boolean DEFAULT false,
+    local_task_id integer,
+    local_user_id integer
+);
+
+
+ALTER TABLE dev.tasks OWNER TO flasktaskr;
+
+--
+-- Name: tasks_task_id_seq; Type: SEQUENCE; Schema: dev; Owner: flasktaskr
+--
+
+CREATE SEQUENCE dev.tasks_task_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE dev.tasks_task_id_seq OWNER TO flasktaskr;
+
+--
+-- Name: tasks_task_id_seq; Type: SEQUENCE OWNED BY; Schema: dev; Owner: flasktaskr
+--
+
+ALTER SEQUENCE dev.tasks_task_id_seq OWNED BY dev.tasks.task_id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: dev; Owner: flasktaskr
+--
+
+CREATE TABLE dev.users (
+    user_id integer NOT NULL,
+    user_name text NOT NULL,
+    password text NOT NULL,
+    email text NOT NULL,
+    role text DEFAULT USER,
+    modification_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    date_added date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    modified_by text,
+    to_delete boolean DEFAULT false
+);
+
+
+ALTER TABLE dev.users OWNER TO flasktaskr;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: dev; Owner: flasktaskr
+--
+
+CREATE SEQUENCE dev.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE dev.users_user_id_seq OWNER TO flasktaskr;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: dev; Owner: flasktaskr
+--
+
+ALTER SEQUENCE dev.users_user_id_seq OWNED BY dev.users.user_id;
+
+
+--
+-- Name: new_id; Type: TABLE; Schema: public; Owner: flasktaskr
+--
+
+CREATE TABLE public.new_id (
+    register_user integer
+);
+
+
+ALTER TABLE public.new_id OWNER TO flasktaskr;
+
+--
+-- Name: new_ids; Type: TABLE; Schema: public; Owner: flasktaskr
+--
+
+CREATE TABLE public.new_ids (
+    register_user integer
+);
+
+
+ALTER TABLE public.new_ids OWNER TO flasktaskr;
+
+--
+-- Name: tasks task_id; Type: DEFAULT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.tasks ALTER COLUMN task_id SET DEFAULT nextval('dev.tasks_task_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.users ALTER COLUMN user_id SET DEFAULT nextval('dev.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: tasks; Type: TABLE DATA; Schema: dev; Owner: flasktaskr
+--
+
+COPY dev.tasks (task_id, user_id, task_name, due_date, priority, status, date_added, modification_date, modified_by, to_delete, local_task_id, local_user_id) FROM stdin;
+56	1	TODO: Watch web classes	7/23/2018	6	0	2019-05-14	2019-05-14	\N	f	\N	\N
+43	1	Buy coffee?	07/11/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+7	1	Test	07/03/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+38	1	Cancel Lynda.com	07/08/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+58	1	AAA: Test2	10/02/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+63	1	Highest task	11/21/2018	10	0	2019-05-14	2019-05-14	\N	f	\N	\N
+8	1	Finish this tutorial....PLEASE!!!	07/23/2018	10	0	2019-05-14	2019-05-14	\N	f	\N	\N
+36	1	DEVEL: Enter default date for new task	07/06/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+57	1	TEST: Read documentation	10/02/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+62	1	TEST: Study jQuery books	11/12/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+64	1	TEST: Watch lectures...again!	9/1/2019	4	0	2019-05-14	2019-05-14	\N	f	\N	\N
+6	1	DEV: Set up production db	10/07/2018	5	0	2019-05-14	2019-05-14	\N	f	\N	\N
+42	1	Start playing with Postgresql's advanced features	07/11/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+66	79	test1234	11/12/2018	2	0	2019-05-14	2019-05-14	\N	f	\N	\N
+51	1	DEVEL: Sort table by column?	07/11/2018	3	0	2019-05-14	2019-05-14	\N	f	\N	\N
+82	1	Blase blase, blase	5/21/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+53	1	DEVEL: Flask and AJAX??	07/21/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+52	1	DEVEL: Connect app to Android	07/15/2018	4	0	2019-05-14	2019-05-14	\N	f	\N	\N
+55	1	DEVEL: Add drop-down calendar for selecting Due Date?	7/23/2018	2	0	2019-05-14	2019-05-14	\N	f	\N	\N
+37	1	Finish reading Python for Professionals	12/20/2018	5	0	2019-05-14	2019-05-14	\N	f	\N	\N
+65	1	FOOD: Buy chicken	11/10/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+5	1	AAA: Again updated on 5/12	AAA: Again updated on 5/12	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+50	1	JOB: NC Works? Does it??	07/14/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+49	1	DEVEL: How to add scrollbars to table?	07/11/2018	4	0	2019-05-14	2019-05-15	\N	f	\N	\N
+87	1	Oopsie daisy! Hola AAA	5/12/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+88	1	Get some work done over the long weekend in preparation for the holiday.	5/12/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+81	1	Blah, blah, blah	5/20/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+85	1	Hey, hey, hey	5/21/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+77	1	Test -- whatever	5/20/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+90	1	Adding a new task on 5/13.	5/12/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+86	1	Zippy do da day, zippidie day	5/12/2019	3	0	2019-05-14	2019-05-15	\N	f	\N	\N
+39	1	Read about logging in Flask	12/10/2018	10	0	2019-05-14	2019-05-15	\N	f	\N	\N
+54	1	DEVEL: Add edit capability	07/12/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+35	1	DEVEL: Show confirmation prompt before deleting task	07/12/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+40	1	Read Travesy's register vs login forms	07/10/2018	1	0	2019-05-14	2019-05-14	\N	f	\N	\N
+61	1	DEVEL: Check date validity, text length when adding tasks	10/12/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+45	1	DEVEL: Create NOT NULL and other constraints in table	07/11/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+44	1	DEVEL: Implement "edit" feature in FlaskTaskr	07/14/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+60	1	DEVEL: Research jquery datatables	10/22/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+59	1	DEVEL: Research jquery date picker	10/22/2018	1	0	2019-05-14	2019-05-15	\N	f	\N	\N
+91	1	This is a test. 5/15/2019	5/12/2019	3	0	2019-05-15	2019-05-15	\N	f	\N	\N
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: dev; Owner: flasktaskr
+--
+
+COPY dev.users (user_id, user_name, password, email, role, modification_date, date_added, modified_by, to_delete) FROM stdin;
+72	test1234	$pbkdf2-sha256$200000$JISQ0tp7r1XKWav1PocQQg$s.r5XFZoUa2FNgyHSX5.37iNieJEnL2O7xNbZXcJiSQ	ricsau@aol.com	user	2019-05-21	2019-05-21	\N	f
+74	jhondoe	$pbkdf2-sha256$200000$815LqTXGOAeAEOJ8L2UMwQ$Htmn7aCXf5lh8d5Fc8oYCnlpFXmIKyBPDYuFw/hNfdE	jhondoe@aol.com	user	2019-05-21	2019-05-21	\N	f
+1	ricsau	$pbkdf2-sha256$200000$aW0NYQzhHAPA2Juzdg6BMA$IfSm.XquUwNeIBTivW6HFm3hg/Dgbo6HwQFd/t1KqsQ	richard@talismansoftwaresolutions.com	flasktaskr	2019-05-21	2019-05-21	\N	f
+75	1234test	$pbkdf2-sha256$200000$x/i/l5ISwrhXKoVwLmXsXQ$RHnPJjg6JJYb9/Z5j9gWe6xl9tk4IRSng8RHB3jcUWI	xxicsau@aol.com	user	2019-05-21	2019-05-21	\N	f
+76	john_doe	$pbkdf2-sha256$200000$BcBYa23tHQNAaO09xxjj3A$OoRYXAMlaDmC/e4Z/DGc0i3A8zFwhyelR6aH36qNL2E	john_doe@aol.com	user	2019-05-21	2019-05-21	\N	f
+78	jane doe	$pbkdf2-sha256$200000$DuEc47zX2tt7r9V6TykFwA$Yo9HiJbbqpyGMrThxneWzeOT1P42i6WoI72mO7EYDWo	jane_doe@hotmail.com	user	2019-05-21	2019-05-21	\N	f
+79	tommyBoy123	$pbkdf2-sha256$200000$tTaG8J4TwlgrZUwpZcy5Fw$TH0GaOA16uBVgBrhAukkDgvLy6pZhmyltkYsCBvCY0k	tommyBoy@aol.com	user	2019-05-21	2019-05-21	\N	f
+82	jhonny_bones_1	john1@aol.com	test@aol.com	\N	2019-05-21	2019-05-21	\N	f
+87	jhonny_bones_2	password234	johnny2@aol.com	\N	2019-05-21	2019-05-21	\N	f
+90	jhonny_bones_3	password2345	johnny3@aol.com	\N	2019-05-21	2019-05-21	\N	f
+95	jhonny_bones_4	password2345	johnny4@aol.com	\N	2019-05-21	2019-05-21	\N	f
+110	jhonny_bones_5	password2345	johnny5@aol.com	\N	2019-05-21	2019-05-21	\N	f
+113	jhonny_bones_6	password2345	johnny6@aol.com	\N	2019-05-21	2019-05-21	\N	f
+\.
+
+
+--
+-- Data for Name: new_id; Type: TABLE DATA; Schema: public; Owner: flasktaskr
+--
+
+COPY public.new_id (register_user) FROM stdin;
+25
+\.
+
+
+--
+-- Data for Name: new_ids; Type: TABLE DATA; Schema: public; Owner: flasktaskr
+--
+
+COPY public.new_ids (register_user) FROM stdin;
+28
+\.
+
+
+--
+-- Name: tasks_task_id_seq; Type: SEQUENCE SET; Schema: dev; Owner: flasktaskr
+--
+
+SELECT pg_catalog.setval('dev.tasks_task_id_seq', 91, true);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: dev; Owner: flasktaskr
+--
+
+SELECT pg_catalog.setval('dev.users_user_id_seq', 115, true);
+
+
+--
+-- Name: users email_unique; Type: CONSTRAINT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.users
+    ADD CONSTRAINT email_unique UNIQUE (email);
+
+
+--
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (task_id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: users users_unique; Type: CONSTRAINT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.users
+    ADD CONSTRAINT users_unique UNIQUE (user_name);
+
+
+--
+-- Name: tasks tasks_user_id_fkey; Type: FK CONSTRAINT; Schema: dev; Owner: flasktaskr
+--
+
+ALTER TABLE ONLY dev.tasks
+    ADD CONSTRAINT tasks_user_id_fkey FOREIGN KEY (user_id) REFERENCES dev.users(user_id);
+
+
+--
+-- Name: SCHEMA dev; Type: ACL; Schema: -; Owner: postgres
+--
+
+GRANT ALL ON SCHEMA dev TO flasktaskr;
+GRANT ALL ON SCHEMA dev TO ricsau;
+
+
+--
+-- Name: TABLE tasks; Type: ACL; Schema: dev; Owner: flasktaskr
+--
+
+GRANT ALL ON TABLE dev.tasks TO ricsau;
+
+
+--
+-- Name: TABLE users; Type: ACL; Schema: dev; Owner: flasktaskr
+--
+
+GRANT ALL ON TABLE dev.users TO ricsau;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
